@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brut-bg: #f3f2ea;
+  --brut-fg: #111;
+  --brut-yellow: #ffd000;
+}
+
+body {
+  background: var(--brut-bg);
+  color: var(--brut-fg);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .bg-brut-bg { background: var(--brut-bg); }
+  .text-brut-fg { color: var(--brut-fg); }
+  .bg-brut-yellow { background: var(--brut-yellow); }
+
+  .brutal-box {
+    @apply border-[3px] border-black bg-white p-4 md:p-6;
+    box-shadow: 8px 8px 0 #111;
+  }
+
+  .brut-input {
+    @apply border-[3px] border-black p-3 font-semibold bg-white;
+  }
+
+  .brut-btn {
+    @apply border-[3px] border-black px-4 py-2 font-black uppercase tracking-wide;
+  }
+
+  .brut-btn:active {
+    transform: translate(2px, 2px);
+  }
+}
