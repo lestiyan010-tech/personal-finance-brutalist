@@ -41,6 +41,7 @@ export default function DashboardClient({ initial }: { initial: Tx[] }) {
     });
     if (!res.ok) return;
     const created = await res.json();
+    if (created.ignored) return;
     setRows((prev) => [{ ...created, amount: Number(created.amount) }, ...prev]);
   }
 

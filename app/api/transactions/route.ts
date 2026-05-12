@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { isMicroTransaction, normalizeCategory } from "@/lib/finance";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
@@ -24,7 +25,7 @@ export async function GET() {
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const rows = await prisma.transaction.findMany({
-    where: { userId },
+    where: { userId, amount: { not: 1 } },
     orderBy: { happenedAt: "desc" },
     take: 200,
   });
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const parsed = createSchema.parse(await req.json());
+  if (isMicroTransaction(parsed.amount)) return Response.json({ ignored: true });
 
   const row = await prisma.transaction.create({
     data: {
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
       title: parsed.title,
       amount: parsed.amount,
       type: parsed.type,
-      category: parsed.category,
+      category: normalizeCategory(parsed.title, parsed.category),
       notes: parsed.notes,
       happenedAt: new Date(parsed.happenedAt),
     },

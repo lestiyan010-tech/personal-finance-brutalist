@@ -10,7 +10,11 @@ export default async function DashboardPage() {
   const user = await prisma.user.findUnique({ where: { email: session.user.email }, select: { id: true, email: true, name: true } });
   if (!user) redirect("/");
 
-  const tx = await prisma.transaction.findMany({ where: { userId: user.id }, orderBy: { happenedAt: "desc" }, take: 200 });
+  const tx = await prisma.transaction.findMany({
+    where: { userId: user.id, amount: { not: 1 } },
+    orderBy: { happenedAt: "desc" },
+    take: 200,
+  });
 
   return (
     <main className="min-h-screen bg-brut-bg text-brut-fg p-6 md:p-10">

@@ -46,7 +46,7 @@ if (process.env.SMTP_HOST && process.env.SMTP_FROM) {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
   pages: { signIn: "/" },
   providers,
 });
